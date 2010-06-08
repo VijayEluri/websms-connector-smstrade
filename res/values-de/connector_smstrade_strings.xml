@@ -21,8 +21,6 @@
 	<string name="enable_smstrade">Aktiviere SMStrade</string>
 	<string name="partner_smstrade_hint">Neuen SMStrade Account anlegen</string>
 	<string name="partner_smstrade_url">http://www.smstrade.de</string>
-	<string name="wo_sender">ohne Absender</string>
-	<string name="w_sender">mit Absender</string>
 	
 	<string name="error_trade_10">Falscher Empfänger</string>
 	<string name="error_trade_20">Absender falsch</string>

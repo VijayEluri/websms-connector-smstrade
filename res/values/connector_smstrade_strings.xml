@@ -25,8 +25,10 @@
 	<string name="enable_smstrade">Enable SMStrade</string>
 	<string name="partner_smstrade_hint">Create new smstrade.de account</string>
 	<string name="partner_smstrade_url">http://www.smstrade.de</string>
-	<string name="wo_sender">w/o sender</string>
-	<string name="w_sender">w/ sender</string>
+	<string name="basic">basic</string>
+	<string name="economy">economy</string>
+	<string name="gold">gold</string>
+	<string name="direct">direct</string>
 	
 	<string name="error_trade_10">Wrong reciepient!</string>
 	<string name="error_trade_20">Sender incorrect!</string>

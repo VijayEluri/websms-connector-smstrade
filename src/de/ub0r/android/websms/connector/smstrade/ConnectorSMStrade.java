@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 
+ * Copyright (C) 2010
  * 
  * This file is part of WebSMS.
  * 
@@ -43,10 +43,14 @@ import de.ub0r.android.websms.connector.common.ConnectorSpec.SubConnectorSpec;
 public class ConnectorSMStrade extends Connector {
 	/** Tag for output. */
 	private static final String TAG = "trade";
-	/** {@link SubConnectorSpec} ID: with sender. */
-	private static final String ID_W_SENDER = "w_sender";
-	/** {@link SubConnectorSpec} ID: without sender. */
-	private static final String ID_WO_SENDER = "wo_sender";
+	/** {@link SubConnectorSpec} ID: basic. */
+	private static final String ID_BASIC = "basic";
+	/** {@link SubConnectorSpec} ID: economy. */
+	private static final String ID_ECONOMY = "economy";
+	/** {@link SubConnectorSpec} ID: gold. */
+	private static final String ID_GOLD = "gold";
+	/** {@link SubConnectorSpec} ID: direct. */
+	private static final String ID_DIRECT = "direct";
 
 	/** SMStrade Gateway URL. */
 	private static final String URL = "https://gateway.smstrade.de/";
@@ -56,8 +60,7 @@ public class ConnectorSMStrade extends Connector {
 	 */
 	@Override
 	public final ConnectorSpec initSpec(final Context context) {
-		final String name = context
-				.getString(R.string.connector_smstrade_name);
+		final String name = context.getString(R.string.connector_smstrade_name);
 		ConnectorSpec c = new ConnectorSpec(name);
 		c.setAuthor(// .
 				context.getString(R.string.connector_smstrade_author));
@@ -65,9 +68,10 @@ public class ConnectorSMStrade extends Connector {
 		c.setCapabilities(ConnectorSpec.CAPABILITIES_UPDATE
 				| ConnectorSpec.CAPABILITIES_SEND
 				| ConnectorSpec.CAPABILITIES_PREFS);
-		c.addSubConnector(ID_WO_SENDER, context.getString(R.string.wo_sender),
-				0);
-		c.addSubConnector(ID_W_SENDER, context.getString(R.string.w_sender), 0);
+		c.addSubConnector(ID_BASIC, context.getString(R.string.basic), 0);
+		c.addSubConnector(ID_ECONOMY, context.getString(R.string.economy), 0);
+		c.addSubConnector(ID_GOLD, context.getString(R.string.gold), 0);
+		c.addSubConnector(ID_DIRECT, context.getString(R.string.direct), 0);
 		return c;
 	}
 
@@ -160,15 +164,9 @@ public class ConnectorSMStrade extends Connector {
 			url.append(Utils.md5(p.getString(Preferences.PREFS_PASSWORD, "")));
 			final String text = command.getText();
 			if (text != null && text.length() > 0) {
-				boolean sendWithSender = false;
 				final String sub = command.getSelectedSubConnector();
-				if (sub != null && sub.equals(ID_W_SENDER)) {
-					sendWithSender = true;
-				}
-				Log.d(TAG, "send with sender = " + sendWithSender);
-				if (sendWithSender) {
-					url.append("&from=1");
-				}
+				url.append("&route=");
+				url.append(sub);
 				url.append("&message=");
 				url.append(URLEncoder.encode(text, "ISO-8859-15"));
 				url.append("&to=");
@@ -176,7 +174,7 @@ public class ConnectorSMStrade extends Connector {
 						.national2international(command.getDefPrefix(), command
 								.getRecipients()), ";", true));
 			} else {
-				url.append("&check=guthaben");
+				url.append("credits/");
 			}
 			Log.d(TAG, "--HTTP GET--");
 			Log.d(TAG, url.toString());
