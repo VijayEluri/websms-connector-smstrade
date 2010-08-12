@@ -33,7 +33,6 @@ import de.ub0r.android.websms.connector.common.ConnectorSpec;
 import de.ub0r.android.websms.connector.common.Log;
 import de.ub0r.android.websms.connector.common.Utils;
 import de.ub0r.android.websms.connector.common.WebSMSException;
-import de.ub0r.android.websms.connector.common.ConnectorSpec.SubConnectorSpec;
 
 /**
  * AsyncTask to manage IO to smstrade.de API.
@@ -43,13 +42,13 @@ import de.ub0r.android.websms.connector.common.ConnectorSpec.SubConnectorSpec;
 public class ConnectorSMStrade extends Connector {
 	/** Tag for output. */
 	private static final String TAG = "trade";
-	/** {@link SubConnectorSpec} ID: basic. */
+	/** SubConnectorSpec ID: basic. */
 	private static final String ID_BASIC = "basic";
-	/** {@link SubConnectorSpec} ID: economy. */
+	/** SubConnectorSpec ID: economy. */
 	private static final String ID_ECONOMY = "economy";
-	/** {@link SubConnectorSpec} ID: gold. */
+	/** SubConnectorSpec ID: gold. */
 	private static final String ID_GOLD = "gold";
-	/** {@link SubConnectorSpec} ID: direct. */
+	/** SubConnectorSpec ID: direct. */
 	private static final String ID_DIRECT = "direct";
 
 	/** SMStrade Gateway URL. */
@@ -103,11 +102,8 @@ public class ConnectorSMStrade extends Connector {
 	 * @param ret
 	 *            return code
 	 * @return true if no error code
-	 * @throws WebSMSException
-	 *             WebSMSException
 	 */
-	private static boolean checkReturnCode(final Context context, final int ret)
-			throws WebSMSException {
+	private static boolean checkReturnCode(final Context context, final int ret) {
 		Log.d(TAG, "ret=" + ret);
 		switch (ret) {
 		case 100:
@@ -146,11 +142,8 @@ public class ConnectorSMStrade extends Connector {
 	 *            {@link Context}
 	 * @param command
 	 *            {@link ConnectorCommand}
-	 * @throws WebSMSException
-	 *             WebSMSException
 	 */
-	private void sendData(final Context context, final ConnectorCommand command)
-			throws WebSMSException {
+	private void sendData(final Context context, final ConnectorCommand command) {
 		// do IO
 		try { // get Connection
 			final StringBuilder url = new StringBuilder(URL);
@@ -181,7 +174,7 @@ public class ConnectorSMStrade extends Connector {
 			Log.d(TAG, "--HTTP GET--");
 			// send data
 			HttpResponse response = Utils.getHttpClient(url.toString(), null,
-					null, null, null);
+					null, null, null, false);
 			int resp = response.getStatusLine().getStatusCode();
 			if (resp != HttpURLConnection.HTTP_OK) {
 				throw new WebSMSException(context, R.string.error_http, ""
@@ -222,8 +215,7 @@ public class ConnectorSMStrade extends Connector {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected final void doUpdate(final Context context, final Intent intent)
-			throws WebSMSException {
+	protected final void doUpdate(final Context context, final Intent intent) {
 		this.sendData(context, new ConnectorCommand(intent));
 	}
 
@@ -231,8 +223,7 @@ public class ConnectorSMStrade extends Connector {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected final void doSend(final Context context, final Intent intent)
-			throws WebSMSException {
+	protected final void doSend(final Context context, final Intent intent) {
 		this.sendData(context, new ConnectorCommand(intent));
 	}
 }
